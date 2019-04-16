@@ -1,6 +1,5 @@
 import sympy as sy
 import numpy as np
-from mpmath import nsum
 from sympy import sin,cos
 
 n=1 #Number of Pendulums-1
@@ -15,19 +14,15 @@ v=list(sy.symbols('v0:%d'%(n+1)))
 a=list(sy.symbols('a0:%d'%(n+1)))
 t=sy.symbols('t')
 
-
 #The differential Equations of a Multipendulum can be calulated using the Lagrange Formalism (In short it states that d/dt*(dL/dy')-dL/dy=0)
 #L=T-V where T is Kinetik Energy, V is Potential Energy. For more information see: https://de.wikipedia.org/wiki/Multipendel
-
-###nsum iterates over mpf (instead of integers) and mpf cant be used as List indices. Rather ugly code :( fix if possible # Does not seem to be possible
-V=g*nsum(lambda k: m[int(k)]*nsum(lambda i:-l[int(i)]*sy.cos(y[int(i)]),[0,k]),[0,n])
+V=g*sum(map(lambda k: m[k]*sum(map(lambda i:-l[i]*sy.cos(y[i]),[0,k])),[0,n]))
 def ugly1(k):
-    return nsum(lambda i: l[int(i)]*v[int(i)]*sy.cos(y[int(i)]),[0,k])
+    return sum(map(lambda i: l[i]*v[i]*sy.cos(y[i]),[0,k]))
 def ugly2(k):
-    return nsum(lambda i: l[int(i)]*v[int(i)]*sy.sin(y[int(i)]),[0,k])
-T=1/2*nsum(lambda k: m[int(k)]*(ugly1(k)**2+ugly2(k)**2),[0,n])
+    return sum(map(lambda i: l[i]*v[i]*sy.sin(y[i]),[0,k]))
+T=1/2*sum(map(lambda k: m[k]*(ugly1(k)**2+ugly2(k)**2),[0,n]))
 L=T-V 
-
 
 #Differentiating L as nessersary for the Lagrangeformalism
 Ldy = np.array([*map(lambda x:L.diff(x),y)])

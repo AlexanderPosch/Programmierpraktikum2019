@@ -67,3 +67,8 @@ print("This part takes ages but technically this function only has to be called 
 Lagrangev=sy.simplify(sy.Matrix(Lagrangev))
 #Lagrangev holds a list of n+1 (in regard to a) linear equations.
 #If we substitute numerical constants in for l,m,v,y they can be solved quite quickly.
+
+#Saving Lagrangev to file 
+f = open('eqations'+str(n+1)+'.py', 'w' )
+f.write(str(Lagrangev))
+f.close()

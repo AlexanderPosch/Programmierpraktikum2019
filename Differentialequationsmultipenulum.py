@@ -27,7 +27,6 @@ L=T-V
 Ldy = sy.Matrix([*map(lambda x:L.diff(x),y)])
 Tdv = sy.Matrix([*map(lambda x:T.diff(x),v)]) #Since V is indipentent of the v's, only T has to be differentiated
 
-
 #Substituting variables with Derivatives sothat I can differentiate Tdv by t
 Tdv=Tdv.subs(list(map(lambda k:(v[k],y[k](t).diff(t)),range(n)))) #v=y'(t)
 Tdv=Tdv.subs(list(map(lambda k:(a[k],y[k](t).diff(t,t)),range(n)))) #a=y''(t)
@@ -35,7 +34,6 @@ Tdv=Tdv.subs(list(map(lambda k:(y[k],y[k](t)),range(n)))) #y=y(t)
 
 #Differentiate Tdv by t
 Tdvdt=sy.Matrix([*map(lambda x:x.diff(t),Tdv)])
-print(Tdvdt)
 Lagrangev=Tdvdt-Ldy #This is Matrix holds a list of n linear equations in a0,a1,a2,... (here still in the form of second derivatives)
 
 #Substituting Derivatives with Variables for clarity
@@ -43,7 +41,7 @@ Lagrangev=Lagrangev.subs(list(map(lambda k:(y[k](t).diff(t,t),a[k]),range(n)))) 
 Lagrangev=Lagrangev.subs(list(map(lambda k:(y[k](t).diff(t),v[k]),range(n)))) #y'(t)=v
 Lagrangev=Lagrangev.subs(list(map(lambda k:(y[k](t),y[k]),range(n)))) #y(t)=y
 
-###This part takes ages but technically this function only has to be called once anyway and having a nice form speeds up further computation
+###This part takes ages but technically this programm only has to be called once anyway and having a nice form speeds up further computation
 print("This part takes ages but technically this function only has to be called once anyway and having a nice form speeds up fruther computation")
 Lagrangev=sy.simplify(Lagrangev)
 

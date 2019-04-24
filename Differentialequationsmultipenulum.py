@@ -1,5 +1,6 @@
 import sys
 sys.path.append('D:\Python\site-packages') #so i have access to sympy (saved to my memorystick)
+###### Warning only sympy version 1.1.1 or older works! ###### (newer versions require different code to convert symbol to function)
 import sympy as sy
 n=1 #Number of Pendulums
 g=9.8 #Acceleration of Gravity

@@ -7,3 +7,7 @@ GUI:
 Dash: https://dash.plot.ly/getting-started?_ga=2.131247375.1841441803.1556701119-891945707.1542423910
 First check whether animations in Dash are possible(dont think they are so mabee look for another package for guis)
 
+Kivy: https://kivy.org/doc/stable/tutorials/pong.html
+Also first check whether animations are possilbe (i think they should be)
+
+

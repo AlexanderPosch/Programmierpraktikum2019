@@ -1,8 +1,8 @@
 """
+Doublependulum animation with live numeric Integration.
+
 General Numerical Solver for the 1D Time-Dependent Schrodinger's equation.
-
 adapted from code at http://matplotlib.sourceforge.net/examples/animation/double_pendulum_animated.py
-
 Double pendulum formula translated from the C code at
 http://www.physics.usyd.edu.au/~wheat/dpend_html/solve_dpend.c
 

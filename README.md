@@ -1,4 +1,6 @@
+# Programmierpraktikum 2019
 Das Multipendel:
+
 Ziel des Projekts ist die Simulation eines Multipendels. Ein Multipendel sind mehrere Pendel, die aneinander gehängt sind. Solche Multipendel sind interessant da sie chaotisches Verhalten aufweisen.
 
 Das Projekt besteht aus folgenden Teilen:
@@ -14,11 +16,3 @@ Für das Numerisches Lösen der Differenzialgleichungen bietet sich die scipy an
 Für die Animation kann zum Beispiel mit matplotlib implementiert werden.
 
 Die Graphical User Interface soll die Parameter einlesen: Anzahl der Pendel, Gewichte, Länge der Verbindungen, Startwinkel, Gravitationskonstante. Außerdem wäre es cool wenn die Animation darin eingebettet ist. Dies könnte man zum Beispiel mit der Library dash implementieren.
-
-Vorgeschlagene Aufteilung:
-1)
-2)
-3)
-4)
-
-

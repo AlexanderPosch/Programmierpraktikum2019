@@ -11,3 +11,7 @@ Kivy: https://kivy.org/doc/stable/tutorials/pong.html
 Also first check whether animations are possilbe (i think they should be)
 
 
+Very usefull Link for animtion with bottons: (Using plotly might be usefull)
+https://plot.ly/~jackluo/2177/double-pendulum/#/
+
+

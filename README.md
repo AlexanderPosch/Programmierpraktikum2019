@@ -1,4 +1,4 @@
-#Minesweeper
+# Minesweeper
 
 Ziel des Projekts ist das Programmieren des Spieles Minesweeper:
 Das Projekt besteht aus folgenden Teilen:

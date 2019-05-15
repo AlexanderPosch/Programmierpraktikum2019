@@ -6,7 +6,7 @@ pygame.event.set_blocked([1,3,6,4])
 
 tilesize=50
 size=np.array((10,10))
-screen = pygame.display.set_mode(((size+0*np.array((10,10)))*tilesize))
+#screen = pygame.display.set_mode(((size+0*np.array((10,10)))*tilesize))
 
 
 
@@ -40,10 +40,7 @@ class Minesweeper():
                 for k in [-1,0,1]:
                     if self.Mf[tuple(np.array(i)+np.array((j,k)))]!=9:
                         self.Mf[tuple(np.array(i)+np.array((j,k)))]+=1
-                    
-
-
-        
+                     
     def flag(self,pos):
         if Minefield[pos]<10:
             Minefield[pos]+=10

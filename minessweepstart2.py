@@ -11,15 +11,15 @@ size=np.array((10,10))
 
 
 
-class Minesweeper():
+class Minesweeper:
     def __init__(self,fsize,bombs,pos=None):
-        self.fsize=fsize
+        self.fsize=np.array(fsize)
         self.Mf=np.zeros(fsize, dtype=int)
         #Array with 0,1,..8 indicating neibouring bombs, 9 means bomb
         ##### 1-. means flaged
         ##### 2-. means visble
         self.Mf,self.Bl=self.bombplacment(bombs)
-        self.Mf=self.nnb()
+        self.nnb()
         
         
 
@@ -28,7 +28,7 @@ class Minesweeper():
         bombpositions=random.sample(range(self.Mf.size),bombs)
         for i in bombpositions:
             c[i]=9
-        c=c.reshape(fsize)
+        c=c.reshape(self.fsize)
         return c,list(zip(*np.where(c==9)))
         
 
@@ -38,8 +38,9 @@ class Minesweeper():
         for i in self.Bl:
             for j in [-1,0,1]:
                 for k in [-1,0,1]:
-                    if self.Mf[tuple(np.array(i)+np.array((j,k)))]!=9:
-                        self.Mf[tuple(np.array(i)+np.array((j,k)))]+=1
+                    if all((np.array(i)+np.array((j,k)))>=0) and all((np.array(i)+np.array((j,k)))<self.fsize):
+                        if self.Mf[tuple(np.array(i)+np.array((j,k)))]!=9:
+                            self.Mf[tuple(np.array(i)+np.array((j,k)))]+=1
                      
     def flag(self,pos):
         if Minefield[pos]<10:
@@ -61,14 +62,12 @@ class Minesweeper():
     def floodfill(self):# Maybee make more fast
         while repeat:
             repeat=False
-            for i in range(size[0]):
-                for j in range(size[1]):
+            for i in range(self.fsize[0]):
+                for j in range(self.fsize[1]):
                     if Minefield[i,j]==20:
                         for k in [-1,0,1]:
                             for l in [-1,0,1]:
-                                if ((i+k>=0)and(j+l)>=0)and ((i+k<size[0])and(j+l<size[1])):
+                                if ((i+k>=0)and(j+l)>=0)and ((i+k<self.fsize[0])and(j+l<self.fsize[1])):
                                     if Minefield[i+k,j+l]<20:
                                         Minefield[i+k,j+l]+=20
                                         repeat=True
-        
-        

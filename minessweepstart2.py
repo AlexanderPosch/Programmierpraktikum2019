@@ -50,10 +50,10 @@ class Minesweeper:
     def openup(self,pos):
         if self.Mf[pos]<10:
             if self.Mf[pos]==9:
-                a.fail()
+                self.fail()
             else:
                 self.Mf[pos]+=20
-                a.floodfill()
+                self.floodfill()
 
             
     def floodfill(self):# Maybee make more fast

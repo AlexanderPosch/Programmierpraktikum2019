@@ -1,15 +1,5 @@
-import pygame
 import numpy as np
 import random 
-pygame.init()
-pygame.event.set_blocked([1,3,6,4])
-
-tilesize=50
-size=np.array((10,10))
-#screen = pygame.display.set_mode(((size+0*np.array((10,10)))*tilesize))
-
-
-
 
 class Minesweeper:
     def __init__(self,fsize,bombs,pos=None):
@@ -18,18 +8,15 @@ class Minesweeper:
         #Array with intergers the first digit denotes the number of neighbouring bombs where 9 denotes that thes a bomb at the location
         #The second digit denotes whether a tile is 1. Flaged or 2. uncovered.
         
-        self.Mf, self.Bl = self.bombplacment(bombs)
-        self.nnb()
+        self.Mf, self.Bl = self.bombplacment(bombs) #Places bombs on minefield and puts their Locations in a list
+        self.nnb() #determines the amount of bombs next to a field and writes it into Mf  
         
-    def bombplacment(self,bombs):
-        c=self.Mf.reshape(self.Mf.size)
-        bombpositions=random.sample(range(self.Mf.size),bombs)
-        c[bombpositions]=9
+    def bombplacment(self,bombs): #bombs denotes the amount of bombs placed.
+        c=self.Mf.reshape(self.Mf.size) 
+        bombpositions=random.sample(range(self.Mf.size),bombs) #random.sapmle(A,t) gives t different random elements from A  
+        c[bombpositions]=9 
         c=c.reshape(self.fsize)
         return c,list(zip(*np.where(c==9)))
-        
-
-
         
     def nnb(self):#number fields next to bombs
         for i in self.Bl:
@@ -39,22 +26,19 @@ class Minesweeper:
                         if self.Mf[tuple(np.array(i)+np.array((j,k)))]!=9:
                             self.Mf[tuple(np.array(i)+np.array((j,k)))]+=1
                      
-    def flag(self,pos):
+    def flag(self,pos):# Used to Flag a square
         if self.Mf[pos]<10:
             self.Mf[pos]+=10
         elif self.Mf[pos]<20:
             self.Mf[pos]-=10
-
-
         
-    def openup(self,pos):
+    def openup(self,pos):# Used to open up/ unvocer a square
         if self.Mf[pos]<10:
             if self.Mf[pos]==9:
                 self.fail()
             else:
                 self.Mf[pos]+=20
                 self.floodfill()
-
             
     def floodfill(self):# Maybee make more fast
         repeat=True
@@ -70,5 +54,5 @@ class Minesweeper:
                                         self.Mf[i+k,j+l]+=20
                                         repeat=True
     def fail(self):
-        print("........Fail...........")
+        #print("........Fail...........")
         globals()['done'] = True

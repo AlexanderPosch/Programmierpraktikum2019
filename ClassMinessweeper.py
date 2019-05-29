@@ -2,18 +2,20 @@ import numpy as np
 import random 
 
 class Minesweeper:
-    def __init__(self,fsize,bombs,pos=None):
+    def __init__(self,fsize,bombs,pos):
         self.fsize=np.array(fsize)
         self.Mf=np.zeros(fsize, dtype=int)
         #Array with intergers the first digit denotes the number of neighbouring bombs where 9 denotes that thes a bomb at the location
         #The second digit denotes whether a tile is 1. Flaged or 2. uncovered.
         
-        self.Mf, self.Bl = self.bombplacment(bombs) #Places bombs on minefield and puts their Locations in a list
+        self.Mf, self.Bl = self.bombplacment(bombs,pos) #Places bombs on minefield and puts their Locations in a list
         self.nnb() #determines the amount of bombs next to a field and writes it into Mf  
         
-    def bombplacment(self,bombs): #bombs denotes the amount of bombs placed.
+    def bombplacment(self,bombs,pos): #bombs denotes the amount of bombs placed no bombs placed around pos.
         c=self.Mf.reshape(self.Mf.size) 
-        bombpositions=random.sample(range(self.Mf.size),bombs) #random.sapmle(A,t) gives t different random elements from A  
+        Upos=[(pos[0]-i)*self.fsize[0]+pos[1]+j for i in [-2,-1,0,1,2] for j in [-2,-1,0,1,2]]
+        l=[i for i in range(self.Mf.size) if i not in Upos]
+        bombpositions=random.sample(l,bombs) #random.sapmle(A,t) gives t different random elements from A  
         c[bombpositions]=9 
         c=c.reshape(self.fsize)
         return c,list(zip(*np.where(c==9)))
@@ -54,5 +56,5 @@ class Minesweeper:
                                         self.Mf[i+k,j+l]+=20
                                         repeat=True
     def fail(self):
-        #print("........Fail...........")
+        print("........Fail...........")
         globals()['done'] = True

@@ -10,21 +10,15 @@ Becker: 2.5h, Nilles: 2.5h
 
 Floodfill:
 Posch: 2h
- 
-Gewinn Verlust Funktion
-Becker: 1h, Posch: 1h, Nilles: 1h
 
 GUI:
-Startscreen:
+Startmenu:
 Becker: 5h, Nilles: 5h
 
-Gamescreen:
-Posch: 8h
+Gamescreen + Skalierung des Fensters + Debugging:
+Posch: 15h
 
-Skalierung des Fensters:
-Posch: 10h
-
-Malen der Bilder Gimp:
+Malen der Bilder in Gimp:
 Posch: 5min
 
 Bemerkung:

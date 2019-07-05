@@ -3,7 +3,6 @@ import random
 import tkinter as tk 
 from PIL import Image, ImageTk
 
-
 class Minesweeper:
     def __init__(self,owner,fsize,bombs,pos):
         self.owner=owner
@@ -17,7 +16,7 @@ class Minesweeper:
         
     def bombplacment(self,bombs,pos): #bombs denotes the amount of bombs placed no bombs placed around pos.
         c=self.Mf.reshape(self.Mf.size) 
-        Upos=[(pos[0]-i)*self.fsize[0]+pos[1]+j for i in [-1,0,1] for j in [-1,0,1]]
+        Upos=[(pos[0]-i)*self.fsize[0]+pos[1]+j for i in [-1,0,1] for j in [-1,0,1]] #Upos is a list containing the fields around where you clicked
         l=[i for i in range(self.Mf.size) if i not in Upos]
         bombpositions=random.sample(l,bombs) #random.sapmle(A,t) gives t different random elements from A  
         c[bombpositions]=9 
@@ -37,6 +36,13 @@ class Minesweeper:
             self.Mf[pos]+=10
         elif self.Mf[pos]<20:
             self.Mf[pos]-=10
+        self.owner.Bombc.destroy()
+        a=str(self.owner.owner.bombs-len([1 for i in self.Mf.flatten() if int(i/10)==1]))
+        if len(a)<2:
+            a=" "+a
+        self.owner.Bombc=tk.Label(self.owner,text=a+" bombs left")
+        self.owner.Bombc.grid(row=0,column=0)
+        
         self.owner.paint(pos)
         
     def openup(self,pos):# Used to open up/ unvocer a square
@@ -52,7 +58,7 @@ class Minesweeper:
                     self.floodfill([np.array(pos)])
                 self.checkifwon()
                 
-    def floodfill(self,plist):# Currently blocks tkinters mainlooop :(
+    def floodfill(self,plist):
         nplist=[]
         for pos in plist:
             for k in [-1,0,1]:
@@ -65,7 +71,7 @@ class Minesweeper:
                         if v<10:
                             self.Mf[cp[0],cp[1]]+=20
                             self.owner.paint(cp)
-                            self.owner.owner.update()###################Decide how much indent#####################
+                            self.owner.owner.update()
         if len(nplist)>0:
             self.floodfill(nplist)
 
@@ -76,18 +82,15 @@ class Minesweeper:
             self.Mf[b]=29
             self.owner.paint(b)
             self.owner.owner.update()
-        print("#######Fail############")
-        globals()['done'] = True
+        self.owner.owner.bind("<Button-1>",lambda x:self.owner.owner.show_frame(StartScreen))
         
     def checkifwon(self):
-        if  np.min(self.Mf)==9:
-            print("Congrtats")
-        
-
-
-# In[2]:
-
-
+        if  np.min(self.Mf)==9 or np.min(self.Mf)==19:
+            self.owner.owner.bind("<Button-1>",lambda x:self.owner.owner.show_frame(StartScreen))
+            for i in range(len("CONGRATS")):
+                self.owner.congratsl=tk.Label(self.owner,text="CONGRATS"[i],font=("Courier", int(self.owner.owner.ss/2)))
+                self.owner.congratsl.grid(row=i+1,column=0)
+            
 class StartScreen(tk.Frame):
     def __init__(self, parent,owner):
         tk.Frame.__init__(self,parent)
@@ -102,11 +105,10 @@ class StartScreen(tk.Frame):
         self.grid_columnconfigure(2, weight=1)
         
         self.Mfsize=tk.IntVar()
-        self.bombs=12
+        self.bombs={8:10,12:25,16:40}
         self.draw()
         
     def draw(self,evnet=None):
-        #print("2")
         fontsize=min(40,int(min(self.owner.fh,self.owner.fw)/16)+1)
         self.owner.resizestuff(1)
         ######Destroy all########
@@ -116,41 +118,35 @@ class StartScreen(tk.Frame):
         self.Header=tk.Label(self,image=self.owner.headerim)
         self.rb1 = tk.Radiobutton(self ,text="Beginner",variable=self.Mfsize , value=8,font=("Courier", fontsize)) 
         self.rb2 = tk.Radiobutton(self ,text="Advanced",variable=self.Mfsize , value=12,font=("Courier", fontsize)) 
-        self.rb3 = tk.Radiobutton(self ,text="Expert  ",variable=self.Mfsize , value=20,font=("Courier", fontsize)) 
-        self.button = tk.Button(self,text='Play', command=self.pass1,font=("Courier", fontsize))
-        
+        self.rb3 = tk.Radiobutton(self ,text="Expert  ",variable=self.Mfsize , value=16,font=("Courier", fontsize)) 
+        self.button = tk.Button(self,text='Play', command=self.pass1,font=("Courier", fontsize))        
         
         self.Header.grid(row=0,column=1,pady=(0,int(self.owner.fh/100)))
         self.rb1.grid(row=2,column=1)
         self.rb2.grid(row=3,column=1)
         self.rb3.grid(row=4,column=1)
         self.button.grid(row=5,column=1,pady=int(self.owner.fh/100))
-        
-        
+        self.rb2.select()
         
     def pass1(self):
         self.owner.firstmove=True
         s=self.Mfsize.get()
         self.owner.Mfsize=np.array((s,s))
-        self.owner.bombs=self.bombs
+        self.owner.bombs=self.bombs[s]
+        ##
+        frame = GameScreen(self.parent,self.owner)
+        frame.grid(row=0, column=0, sticky="nsew")
+        self.owner.frames[GameScreen]=frame
+        ##
         self.owner.frames[GameScreen].draw()
-        
         self.owner.show_frame(GameScreen)
-        
-        
-        
-
-
-# In[3]:
-
-
+               
 class GameScreen(tk.Frame):
     def __init__(self, parent,owner):
         tk.Frame.__init__(self,parent)
         self.parent=parent
         self.owner=owner
         self.bind("<Configure>",self.owner.resizewindow)
-        
         
     def draw(self,event=None):
         ######Destroy all########
@@ -167,8 +163,13 @@ class GameScreen(tk.Frame):
         self.grid_columnconfigure(self.owner.Mfsize[1]+2, weight=1)
         
         self.owner.resizestuff(2)
-        #self.Header=tk.Label(self,image=self.owner.headerim2)
-        #self.Header.grid(row=0,column=1)
+        
+        a=str(self.owner.bombs-len([1 for i in self.m.Mf.flatten() if int(i/10)==1]))
+        if len(a)<2:
+            a=" "+a
+        self.Bombc=tk.Label(self,text=a+" bombs left")
+        self.Bombc.grid(row=0,column=0)
+        
         [[self.buttonmaker(i,j) for i in range(self.owner.Mfsize[0])] for j in range(self.owner.Mfsize[1])]
 
     def buttonmaker(self,i,j):
@@ -204,38 +205,27 @@ class GameScreen(tk.Frame):
         elif c==20:
             return 10
 
-
-# In[4]:
-
-
 class Pagemaneger(tk.Tk):
     def __init__(self, *args, **kwargs):
-        self.firstmove=True
-        self.time1=0
-        self.time2=0
-        self.counter=0
+        self.firstmove=True #This is needed for the program to create the minefield after the first click
         tk.Tk.__init__(self, *args, **kwargs)
+        self.title("Minesweeper")
         
         container = tk.Frame(self)
-
         container.pack(side="top", fill="both", expand = True)
-
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
-        
         
         self.setvariables()
         self.geometry('%sx%s' % (self.fw, self.fh))
         self.getimages()
-        self.frames = {}
         
+        self.frames = {} #Create Dicionnary with the MenuScreen and the Gamescreen
         for screen in [StartScreen,GameScreen]:
             frame = screen(container, self)
             frame.grid(row=0, column=0, sticky="nsew")
             self.frames[screen] = frame
             
-        
-        #self.bind("<Enter>",self.resizewindow)
         self.show_frame(StartScreen)
         
     def setvariables(self):
@@ -244,26 +234,19 @@ class Pagemaneger(tk.Tk):
         self.fw=int(self.screenwidth/1.5)
         self.fh=int(self.screenheight/1.3)
         
-        #self.Mfsize=(12,12)
-        self.bombs=12
-        
     def show_frame(self, cont):
+        self.unbind("<Button-1>")# it was binded to restart the game
         frame = self.frames[cont]
         frame.tkraise()
         self.currentscreen=cont
         
     def getimages(self):
         #Images For GameScreen
-        self.himage = Image.open('/home/alexander/Pictures/test/Header.png')
-        #self.headerim= ImageTk.PhotoImage(self.himage)
+        self.himage = Image.open('Header.png')
         
         #Images For GameScreen
-        self.himage2 = Image.open('/home/alexander/Pictures/test/Header2.png')
-        #self.headerim2= ImageTk.PhotoImage(self.himage2)
-            
-        self.images=[Image.open('/home/alexander/Pictures/test/Msw'+str(x)+'.png') for x in range(12)]
-        #self.tileimages=[ImageTk.PhotoImage(img) for img in self.images]
-            
+        self.images=[Image.open('Msw'+str(x)+'.png') for x in range(12)]
+           
     def resizestuff(self,t):
         #Images For GameScreen
         if t==1:
@@ -272,14 +255,9 @@ class Pagemaneger(tk.Tk):
         
         #Images For GameScreen 
         elif t==2:
-            print("hello")
             self.ss=int(np.min((self.fw/self.Mfsize[0]-3,self.fh/self.Mfsize[1]-3))/1.25)
             self.imagesresized=[img.resize((self.ss,self.ss), Image.ANTIALIAS) for img in self.images]
             self.tileimages=[ImageTk.PhotoImage(img) for img in self.imagesresized]
-            
-            self.himage2r = self.himage2.resize((self.fw, int(self.fh/10)), Image.ANTIALIAS)
-            self.headerim2= ImageTk.PhotoImage(self.himage2r)
-
             
     def resizewindow(self,event):
         a,b=(self.winfo_width(),self.winfo_height())
@@ -287,8 +265,6 @@ class Pagemaneger(tk.Tk):
             self.fw ,self.fh =a,b
         fontsize=min(40,int(min(self.fh,self.fw)/16)+1)
         self.frames[self.currentscreen].draw()
-        
-        
         
 app=Pagemaneger()
 app.mainloop()

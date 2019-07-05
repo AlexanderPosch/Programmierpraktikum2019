@@ -22,5 +22,4 @@ Malen der Bilder in Gimp:
 Posch: 5min
 
 Bemerkung:
-Becker und Nilles mussten sich anfangs noch einarbeiten und sich mit Python vertraut machen.
-Posch hatte hingegen davor schon Python Kenntnisse und hat deshalb mehr Zeit für das eigentliche Programmieren des Projekts investiert.
+Bemerkung: Becker und Nilles mussten sich anfangs noch einarbeiten und haben Zeit investiert, um sich mit Python vertraut zu machen. Posch hatte hingegen davor schon Python Kenntnisse und hat deshalb mehr Zeit für das eigentliche Programmieren des Projekts investiert.

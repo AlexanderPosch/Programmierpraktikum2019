@@ -1,4 +1,5 @@
 Algorithmen:
+
 Entwicklung der Umsetzungsidee + Erstellen des Minenfeldes + aufdecken/flaggen:
 Becker: 4h, Posch: 4h, Nilles: 4h
 
